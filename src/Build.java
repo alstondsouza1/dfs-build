@@ -61,7 +61,41 @@ public class Build {
    * @return the longest reachable word, or an empty string if the vertex is null
    */
   public static String longestWord(Vertex<String> vertex) {
-    return "";
+
+    // if the vertex is null, return an empty string
+    // use a set to track the visited nodes
+    // recursively visit all the connected words
+    // return the longest word
+
+    if (vertex == null) return "";
+
+    Set<Vertex<String>> visited = new HashSet<>();
+
+    return longestWordHelper(vertex, visited);
+  }
+
+  // create a helper method
+  private static String longestWordHelper(Vertex<String> vertex, Set<Vertex<String>> visited) {
+
+    // base case
+    if (vertex == null) return "";
+    if (visited.contains(vertex)) return "";
+
+    // add the vertex
+    visited.add(vertex);
+
+    String word = vertex.data;
+
+    // recursively call the helper method on all neighbors
+    for (Vertex<String> neighbor : vertex.neighbors) {
+      String longest = longestWordHelper(neighbor, visited); 
+
+      // return the longest word
+      if (longest.length() > word.length()) {
+        word = longest;
+      }
+    }
+    return word;
   }
 
   /**
