@@ -106,6 +106,39 @@ public class Build {
    * @param <T> the type of values stored in the vertices
    */
   public static <T> void printSelfLoopers(Vertex<T> vertex) {
+
+    // if the vertex is null, return
+    // use a set to track visited nodes
+    // check if a vertex is in its own neighbors 
+    // recursively visit all the connected vertices
+
+    if (vertex == null) return;
+    
+    Set<Vertex<T>> visited = new HashSet<>();
+    printSelfLoopersHelper(vertex, visited);
+
+  }
+
+  // create a helper method
+  private static <T> void printSelfLoopersHelper(Vertex<T> vertex, Set<Vertex<T>> visited) {
+
+    // base case
+    if (vertex == null) return;
+
+    if (visited.contains(vertex)) return;
+
+    // add the vertex
+    visited.add(vertex);
+
+    if (vertex.neighbors.contains(vertex)) {
+      System.out.println(vertex.data);
+    }
+
+    for (Vertex<T> neighbor : vertex.neighbors) {
+      printSelfLoopersHelper(vertex, visited);
+    }
+
+
   }
 
   /**
