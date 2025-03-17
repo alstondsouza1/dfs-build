@@ -171,7 +171,7 @@ public class Build {
 
     visited.add(current);
 
-    for (Airport neighbor : current.neighbors) {
+    for (Airport neighbor : current.getOutboundFlights()) {
       if (canReachHelper(neighbor, destination, visited)) {
         return true;
       }
@@ -211,7 +211,7 @@ public class Build {
 
     visited.add(current);
 
-    for (T neighbor : graph.get(current)) {
+    for (T neighbor : graph.getOrDefault(current, new ArrayList<>())) {
       uncreachableHelper(graph, neighbor, visited);
     }
   }
