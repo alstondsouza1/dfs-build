@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -135,7 +136,7 @@ public class Build {
     }
 
     for (Vertex<T> neighbor : vertex.neighbors) {
-      printSelfLoopersHelper(vertex, visited);
+      printSelfLoopersHelper(neighbor, visited);
     }
 
 
@@ -150,8 +151,36 @@ public class Build {
    * @return true if the destination is reachable from the start, false otherwise
    */
   public static boolean canReach(Airport start, Airport destination) {
+
+    if (start == null) return false;
+
+    if (destination == null) return false;
+
+    Set<Airport> visited = new HashSet<>();
+    return canReachHelper(start, destination, visited);
+  }
+  
+  private static boolean canReachHelper(Airport current, Airport destination, Set<Airport> visited) {
+
+    // base case
+    if (current == null) return false;
+
+    if (current.equals(destination)) return true;
+
+    if (visited.contains(current)) return false;
+
+    visited.add(current);
+
+    for (Airport neighbor : current.neighbors) {
+      if (canReachHelper(neighbor, destination, visited)) {
+        return true;
+      }
+    }
+
     return false;
   }
+
+
 
   /**
    * Returns the set of all values in the graph that cannot be reached from the given starting value.
@@ -163,6 +192,27 @@ public class Build {
    * @return a set of values that cannot be reached from the starting value
    */
   public static <T> Set<T> unreachable(Map<T, List<T>> graph, T starting) {
-    return new HashSet<>();
+    if (starting == null || graph == null)
+      return new HashSet<>();
+
+    Set<T> visited = new HashSet<>();
+
+    uncreachableHelper(graph, starting, visited);
+
+    Set<T> result = new HashSet<>(graph.keySet());
+    result.removeAll(visited);
+
+    return result;
+  }
+
+  private static <T> void uncreachableHelper(Map<T, List<T>> graph, T current, Set<T> visited) {
+    if (current == null || visited.contains(current))
+      return;
+
+    visited.add(current);
+
+    for (T neighbor : graph.get(current)) {
+      uncreachableHelper(graph, neighbor, visited);
+    }
   }
 }
